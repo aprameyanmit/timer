@@ -1,24 +1,32 @@
-let globalEndTime = null; // Stores the global timer
+const { schedule } = require('@netlify/functions');
+
+let endTime = null;
 
 exports.handler = async (event) => {
+    if (event.httpMethod === "GET") {
+        return {
+            statusCode: 200,
+            body: JSON.stringify({ endTime })
+        };
+    }
+
     if (event.httpMethod === "POST") {
         const { action, authCode } = JSON.parse(event.body);
-
-        if (authCode !== "secure123") { // Secure authentication
-            return { statusCode: 403, body: JSON.stringify({ success: false, message: "Unauthorized" }) };
+        if (authCode !== "vadithya16") {
+            return { statusCode: 403, body: JSON.stringify({ error: "Unauthorized" }) };
         }
 
         if (action === "start") {
-            globalEndTime = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes timer
+            endTime = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
         } else if (action === "stop") {
-            globalEndTime = null; // Stop the timer
+            endTime = null;
         }
 
-        return { statusCode: 200, body: JSON.stringify({ success: true }) };
+        return {
+            statusCode: 200,
+            body: JSON.stringify({ success: true, endTime })
+        };
     }
 
-    return {
-        statusCode: 200,
-        body: JSON.stringify({ endTime: globalEndTime }),
-    };
+    return { statusCode: 405, body: "Method Not Allowed" };
 };
