@@ -189,3 +189,9 @@ h1.h1head1 {
     margin-bottom: 10px;
     margin-top: 1%;
 }
+button#startButton {
+    color: white;
+    background: #dba110;
+    width: 10%;
+    height: 30px;
+}
