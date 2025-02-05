@@ -49,7 +49,7 @@ async function fetchEndTime() {
 
 // Start the countdown
 function startCountdown() {
-    if (timerInterval) clearInterval(timerInterval);
+    if (timerInterval) clearInterval(timerInterval); // Ensure only one interval
     timerInterval = setInterval(updateTimer, 1000);
     updateTimer();
 }
@@ -57,7 +57,7 @@ function startCountdown() {
 // Update the timer display
 function updateTimer() {
     if (!endTime) return;
-    
+
     const now = new Date();
     const timeRemaining = endTime - now;
 
@@ -65,6 +65,10 @@ function updateTimer() {
         clearInterval(timerInterval);
         document.getElementById("timer").textContent = "Time Over";
         document.getElementById("buzzer").play();
+
+        // Uncomment this line to debug when the timer reaches zero
+        console.log("Timer reached zero. Time Over!");
+
         return;
     }
 
