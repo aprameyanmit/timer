@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             return;
         }
 
-        await fetchEndTime(); // Refresh timer state after action
+        location.reload(); // Auto-refresh page to update immediately
     });
 
     setInterval(fetchEndTime, 5000); // Poll every 5 seconds to keep all users in sync
