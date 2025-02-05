@@ -11,7 +11,7 @@ exports.handler = async (event) => {
 
     // Handle POST requests for starting/stopping the timer
     const { action, authCode } = JSON.parse(event.body);
-    const VALID_AUTH_CODE = "aprameya2025"; // Change this for better security
+    const VALID_AUTH_CODE = "vadithya16"; // Change this for better security
 
     if (authCode !== VALID_AUTH_CODE) {
         return {
