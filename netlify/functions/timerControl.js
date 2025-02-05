@@ -1,15 +1,17 @@
-let endTime = null; // Store the timer globally on the server
+let endTime = null; // Global timer variable
 
 exports.handler = async (event) => {
     if (event.httpMethod === "GET") {
+        // Return the current timer state to all users
         return {
             statusCode: 200,
             body: JSON.stringify({ endTime }),
         };
     }
 
+    // Handle POST requests for starting/stopping the timer
     const { action, authCode } = JSON.parse(event.body);
-    const VALID_AUTH_CODE = "secure123"; // Change this for better security
+    const VALID_AUTH_CODE = "aprameya2025"; // Change this for better security
 
     if (authCode !== VALID_AUTH_CODE) {
         return {
@@ -19,13 +21,15 @@ exports.handler = async (event) => {
     }
 
     if (action === "start") {
-        endTime = Date.now() + 24 * 60 * 60 * 1000; // Set timer for 24 hours
+        if (!endTime) {
+            endTime = Date.now() + 24 * 60 * 60 * 1000; // 24-hour timer
+        }
         return {
             statusCode: 200,
             body: JSON.stringify({ success: true, endTime }),
         };
     } else if (action === "stop") {
-        endTime = null;
+        endTime = null; // Reset the timer for all users
         return {
             statusCode: 200,
             body: JSON.stringify({ success: true, endTime: null }),

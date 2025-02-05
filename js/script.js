@@ -5,15 +5,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const startButton = document.getElementById("startButton");
     const timerElement = document.getElementById("timer");
 
-    // Fetch the current end time from the server
-    const response = await fetch("/.netlify/functions/timerControl");
-    const result = await response.json();
-
-    if (result.endTime) {
-        endTime = new Date(result.endTime);
-        startCountdown();
-        startButton.textContent = "Stop Timer";
-    }
+    // Fetch the global timer from the server
+    await fetchEndTime();
 
     startButton.addEventListener("click", async () => {
         const authCode = prompt("Enter authentication code:");
@@ -31,24 +24,37 @@ document.addEventListener("DOMContentLoaded", async () => {
             return;
         }
 
-        if (action === "start") {
-            endTime = new Date(result.endTime);
-            startCountdown();
-            startButton.textContent = "Stop Timer";
-        } else {
-            clearInterval(timerInterval);
-            endTime = null;
-            timerElement.textContent = "00:00:00";
-            startButton.textContent = "Start Timer";
-        }
+        await fetchEndTime(); // Refresh timer state after action
     });
+
+    setInterval(fetchEndTime, 5000); // Poll every 5 seconds to keep all users in sync
 });
 
+// Fetch the global timer from the server
+async function fetchEndTime() {
+    const response = await fetch("/.netlify/functions/timerControl");
+    const result = await response.json();
+
+    if (result.endTime) {
+        endTime = new Date(result.endTime);
+        startCountdown();
+        document.getElementById("startButton").textContent = "Stop Timer";
+    } else {
+        clearInterval(timerInterval);
+        endTime = null;
+        document.getElementById("timer").textContent = "00:00:00";
+        document.getElementById("startButton").textContent = "Start Timer";
+    }
+}
+
+// Start the countdown
 function startCountdown() {
+    if (timerInterval) clearInterval(timerInterval);
     timerInterval = setInterval(updateTimer, 1000);
     updateTimer();
 }
 
+// Update the timer display
 function updateTimer() {
     if (!endTime) return;
     
