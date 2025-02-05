@@ -1,0 +1,41 @@
+/*Responsive*/
+/*Responsive mobile*/
+@media only screen and (max-width: 480px) { 
+#timer {
+    font-size: 4rem;
+}
+h1.h1head1 {
+    font-size: 60px;
+}
+img.imgcollegebanner {
+    width: 70%;
+    height: auto;
+}
+button#startButton {
+    width: auto;
+    height: auto;
+}
+}
+
+
+/* media query tab */
+@media screen and (min-width : 481px) and (max-width: 768px) {
+#timer {
+    font-size: 4rem;
+}
+h1.h1head1 {
+    font-size: 60px;
+}
+img.imgcollegebanner {
+    width: 70%;
+    height: auto;
+}
+button#startButton {
+    width: auto;
+    height: auto;
+}
+
+}
+
+
+
