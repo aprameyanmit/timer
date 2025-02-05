@@ -1,43 +1,24 @@
-let endTime = null; // Global timer variable
+let globalEndTime = null; // Stores the global timer
 
 exports.handler = async (event) => {
-    if (event.httpMethod === "GET") {
-        // Return the current timer state to all users
-        return {
-            statusCode: 200,
-            body: JSON.stringify({ endTime }),
-        };
-    }
+    if (event.httpMethod === "POST") {
+        const { action, authCode } = JSON.parse(event.body);
 
-    // Handle POST requests for starting/stopping the timer
-    const { action, authCode } = JSON.parse(event.body);
-    const VALID_AUTH_CODE = "vadithya16"; // Change this for better security
-
-    if (authCode !== VALID_AUTH_CODE) {
-        return {
-            statusCode: 401,
-            body: JSON.stringify({ success: false, message: "Unauthorized" }),
-        };
-    }
-
-    if (action === "start") {
-        if (!endTime) {
-            endTime = Date.now() + 24 * 60 * 60 * 1000; // 24-hour timer
+        if (authCode !== "secure123") { // Secure authentication
+            return { statusCode: 403, body: JSON.stringify({ success: false, message: "Unauthorized" }) };
         }
-        return {
-            statusCode: 200,
-            body: JSON.stringify({ success: true, endTime }),
-        };
-    } else if (action === "stop") {
-        endTime = null; // Reset the timer for all users
-        return {
-            statusCode: 200,
-            body: JSON.stringify({ success: true, endTime: null }),
-        };
+
+        if (action === "start") {
+            globalEndTime = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes timer
+        } else if (action === "stop") {
+            globalEndTime = null; // Stop the timer
+        }
+
+        return { statusCode: 200, body: JSON.stringify({ success: true }) };
     }
 
     return {
-        statusCode: 400,
-        body: JSON.stringify({ success: false, message: "Invalid action" }),
+        statusCode: 200,
+        body: JSON.stringify({ endTime: globalEndTime }),
     };
 };
