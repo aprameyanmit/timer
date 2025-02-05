@@ -1,5 +1,2 @@
 [build]
-  functions = "netlify/functions"  # Specify where the serverless functions are located
-
-[dev]
   functions = "netlify/functions"
