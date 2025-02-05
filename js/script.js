@@ -66,9 +66,6 @@ function updateTimer() {
         document.getElementById("timer").textContent = "Time Over";
         document.getElementById("buzzer").play();
 
-        // Uncomment this line to debug when the timer reaches zero
-        console.log("Timer reached zero. Time Over!");
-
         return;
     }
 
